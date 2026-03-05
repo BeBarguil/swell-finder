@@ -1,80 +1,78 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <!-- Header com localização -->
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold text-gray-900 mb-2">
+<div class="container mx-auto px-4 py-8">
+  <div class="text-center mb-12">
+    <h1 class="text-5xl font-bold text-gray-900 mb-4">
       Encontre as Melhores Ondas
     </h1>
-    <p class="text-gray-600 mb-4">
+    <p class="text-xl text-gray-600 mb-8">
       Descubra praias próximas com condições perfeitas para surf
     </p>
-
-    <button
-      id="get-location-btn"
-      data-controller="geolocation"
-      data-action="click->geolocation#getLocation"
-      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 flex items-center space-x-2">
+    
+    <% if @user_location %>
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 max-w-md mx-auto">
+        <div class="flex items-center justify-center gap-2">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span class="text-blue-800 font-medium">Mostrando praias próximas à sua localização</span>
+        </div>
+      </div>
+    <% end %>
+    
+    <button 
+      id="use-location-btn"
+      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105 flex items-center gap-2 mx-auto"
+    >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
       </svg>
-      <span>Usar Minha Localização</span>
+      <span id="btn-text">Usar Minha Localização</span>
     </button>
-
-    <div id="location-status" class="mt-2 text-sm text-gray-600"></div>
   </div>
 
-  <!-- Grid de praias -->
-  <div id="beaches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <% if @beaches.blank? %>
-      <div class="col-span-full text-center py-12">
-        <p class="text-gray-500 text-lg">
-          Use sua localização para encontrar praias próximas!
-        </p>
-      </div>
-    <% else %>
-      <% @beaches.each do |beach| %>
-        <%= render partial: 'beach_card', locals: { beach: beach, user_location: @user_location } %>
-      <% end %>
+  <div id="beaches-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @beaches.each do |beach| %>
+      <%= render partial: 'beach_card', locals: { beach: beach } %>
     <% end %>
   </div>
 </div>
 
 <script>
-  // Controlador Stimulus para geolocalização
-  document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('get-location-btn');
-    const status = document.getElementById('location-status');
-    const grid = document.getElementById('beaches-grid');
-
-    if (btn) {
-      btn.addEventListener('click', () => {
-        if (!navigator.geolocation) {
-          status.textContent = 'Geolocalização não suportada pelo navegador';
-          status.className = 'mt-2 text-sm text-red-600';
-          return;
+document.getElementById('use-location-btn').addEventListener('click', function() {
+  const btn = this;
+  const btnText = document.getElementById('btn-text');
+  
+  // Mostrar feedback visual
+  btn.disabled = true;
+  btn.classList.add('opacity-75');
+  btnText.textContent = 'Obtendo localização...';
+  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        btnText.textContent = 'Carregando praias próximas...';
+        window.location.href = `/?lat=${lat}&lng=${lng}`;
+      }, 
+      function(error) {
+        btn.disabled = false;
+        btn.classList.remove('opacity-75');
+        btnText.textContent = 'Usar Minha Localização';
+        
+        let message = 'Não foi possível obter sua localização.';
+        if (error.code === error.PERMISSION_DENIED) {
+          message = 'Permissão negada. Por favor, permita o acesso à localização nas configurações do navegador.';
         }
-
-        status.textContent = 'Buscando sua localização...';
-        status.className = 'mt-2 text-sm text-blue-600';
-        btn.disabled = true;
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            status.textContent = `Localização encontrada! Buscando praias próximas...`;
-
-            // Redirecionar com parâmetros de localização
-            window.location.href = `/?lat=${lat}&lng=${lng}`;
-          },
-          (error) => {
-            status.textContent = 'Erro ao obter localização. Verifique as permissões.';
-            status.className = 'mt-2 text-sm text-red-600';
-            btn.disabled = false;
-          }
-        );
-      });
-    }
-  });
+        alert(message);
+      }
+    );
+  } else {
+    btn.disabled = false;
+    btn.classList.remove('opacity-75');
+    btnText.textContent = 'Usar Minha Localização';
+    alert('Geolocalização não é suportada pelo seu navegador.');
+  }
+});
 </script>
