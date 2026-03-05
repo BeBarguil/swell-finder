@@ -11,6 +11,14 @@ class Beach < ApplicationRecord
     surf_conditions.order(created_at: :desc).first
   end
   
+  def difficulty_label
+    {
+      'beginner' => 'Iniciante',
+      'intermediate' => 'Intermediário',
+      'advanced' => 'Avançado/Profissional'
+    }[difficulty_level]
+  end
+  
   def distance_from(lat, lng)
     lat1_rad = lat * Math::PI / 180
     lat2_rad = latitude * Math::PI / 180
