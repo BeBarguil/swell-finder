@@ -1,0 +1,39 @@
+Started GET "/" for ::1 at 2026-03-05 14:49:36 -0300
+  
+NoMethodError (undefined method `allow_browser' for class ApplicationController):
+  
+app/controllers/application_controller.rb:3:in `<class:ApplicationController>'
+app/controllers/application_controller.rb:1:in `<top (required)>'
+app/controllers/beaches_controller.rb:1:in `<top (required)>'
+Started GET "/apple-touch-icon-precomposed.png" for ::1 at 2026-03-05 14:49:36 -0300
+  
+ActionController::RoutingError (No route matches [GET] "/apple-touch-icon-precomposed.png"):
+  
+Started GET "/apple-touch-icon.png" for ::1 at 2026-03-05 14:49:36 -0300
+Started GET "/apple-touch-icon.png" for ::1 at 2026-03-05 14:49:36 -0300
+  
+ActionController::RoutingError (No route matches [GET] "/apple-touch-icon.png"):
+  
+Started GET "/favicon.ico" for ::1 at 2026-03-05 14:49:36 -0300
+  
+ActionController::RoutingError (No route matches [GET] "/apple-touch-icon.png"):
+  
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/assets/turbo.min-b86d83036ff04169e5bf3ebbc82e0ad528456259e47091b448f41a3cadabdb40.js" for ::1 at 2026-03-05 14:49:36 -0300
+Started GET "/favicon.ico" for ::1 at 2026-03-05 14:49:36 -0300
+Started GET "/apple-touch-icon-precomposed.png" for ::1 at 2026-03-05 14:49:36 -0300
+Started GET "/assets/application-b65bdaa03de48970656ede80f34c9084c557944833a5dac0f1e0053c41042ec4.css" for ::1 at 2026-03-05 14:49:36 -0300
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  
+ActionController::RoutingError (No route matches [GET] "/apple-touch-icon-precomposed.png"):
+  
+  
+ActionController::RoutingError (No route matches [GET] "/assets/application-b65bdaa03de48970656ede80f34c9084c557944833a5dac0f1e0053c41042ec4.css"):
+  
+  
+ActionController::RoutingError (No route matches [GET] "/assets/turbo.min-b86d83036ff04169e5bf3ebbc82e0ad528456259e47091b448f41a3cadabdb40.js"):
+  
