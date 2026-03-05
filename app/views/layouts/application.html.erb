@@ -3,13 +3,12 @@
   <head>
     <title>Surf Spot Finder - Encontre as Melhores Ondas</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="Encontre as melhores praias para surfar perto de você. Monitore condições de swell, vento e dificuldade em tempo real.">
+    <meta name="description" content="Encontre as melhores praias para surfar perto de você.">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body class="bg-gradient-to-br from-blue-50 to-cyan-50 min-h-screen">
     <nav class="bg-white shadow-lg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,22 +21,12 @@
               <span class="text-xl font-bold text-gray-900">Surf Spot Finder</span>
             </a>
           </div>
-          <div class="flex items-center space-x-4">
-            <a href="/" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-              Praias
-            </a>
-            <a href="https://github.com/BeBarguil/swell-finder" target="_blank" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-              GitHub
-            </a>
-          </div>
         </div>
       </div>
     </nav>
-
     <main>
       <%= yield %>
     </main>
-
     <footer class="bg-white mt-12 border-t border-gray-200">
       <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <p class="text-center text-gray-500 text-sm">
