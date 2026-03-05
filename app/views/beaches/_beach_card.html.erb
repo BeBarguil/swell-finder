@@ -1,0 +1,120 @@
+<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+  <div class="p-6">
+    <!-- Header do card -->
+    <div class="flex justify-between items-start mb-4">
+      <div class="flex-1">
+        <h3 class="text-xl font-bold text-gray-900 mb-1">
+          <%= beach.name %>
+        </h3>
+        <p class="text-sm text-gray-600">
+          <%= "#{beach.city}, #{beach.state}" if beach.city && beach.state %>
+        </p>
+      </div>
+      
+      <% if defined?(user_location) && user_location %>
+        <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+          <%= "#{beach.distance_from(user_location[:lat], user_location[:lng])} km" %>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Dificuldade -->
+    <div class="mb-4">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= 
+        case beach.difficulty_level
+        when 'beginner' then 'bg-green-100 text-green-800'
+        when 'intermediate' then 'bg-yellow-100 text-yellow-800'
+        when 'advanced' then 'bg-red-100 text-red-800'
+        end
+      %>">
+        <%= beach.difficulty_label %>
+      </span>
+    </div>
+    
+    <!-- Condições atuais -->
+    <% conditions = beach.current_conditions %>
+    <% if conditions %>
+      <div class="border-t border-gray-200 pt-4">
+        <h4 class="text-sm font-semibold text-gray-700 mb-3">Condições Atuais</h4>
+        
+        <div class="grid grid-cols-2 gap-3">
+          <!-- Altura das ondas -->
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Ondas</p>
+              <p class="text-sm font-semibold text-gray-900"><%= conditions.wave_height_formatted %></p>
+            </div>
+          </div>
+          
+          <!-- Vento -->
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Vento</p>
+              <p class="text-sm font-semibold text-gray-900">
+                <%= conditions.wind_speed_formatted %> <%= conditions.wind_direction_text %>
+              </p>
+            </div>
+          </div>
+          
+          <!-- Qualidade do Swell -->
+          <div class="col-span-2">
+            <div class="bg-gradient-to-r <%= 
+              case conditions.swell_quality
+              when 'Excelente' then 'from-green-400 to-green-500'
+              when 'Ótimo' then 'from-green-300 to-green-400'
+              when 'Bom' then 'from-yellow-400 to-yellow-500'
+              when 'Pequeno' then 'from-orange-400 to-orange-500'
+              else 'from-gray-400 to-gray-500'
+              end
+            %> text-white px-4 py-2 rounded-lg text-center">
+              <p class="text-xs font-medium">Qualidade</p>
+              <p class="text-sm font-bold"><%= conditions.swell_quality %></p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Status geral -->
+        <div class="mt-4">
+          <% if conditions.good_conditions? %>
+            <div class="flex items-center space-x-2 text-green-700 bg-green-50 px-3 py-2 rounded-lg">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm font-medium">Boas condições para surfar!</span>
+            </div>
+          <% else %>
+            <div class="flex items-center space-x-2 text-yellow-700 bg-yellow-50 px-3 py-2 rounded-lg">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm font-medium">Condições fracas</span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="border-t border-gray-200 pt-4">
+        <p class="text-sm text-gray-500 text-center py-4">
+          Dados não disponíveis no momento
+        </p>
+      </div>
+    <% end %>
+    
+    <!-- Link para detalhes -->
+    <div class="mt-4">
+      <a href="/beaches/<%= beach.id %>" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+        Ver Detalhes
+      </a>
+    </div>
+  </div>
+</div>

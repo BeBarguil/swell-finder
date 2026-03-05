@@ -1,0 +1,23 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: surf_spot_finder_development
+  
+  # Para desenvolvimento local, você pode usar:
+  # username: postgres
+  # password: sua_senha
+  # host: localhost
+
+test:
+  <<: *default
+  database: surf_spot_finder_test
+
+production:
+  <<: *default
+  database: surf_spot_finder_production
+  username: surf_spot_finder
+  password: <%= ENV["SURF_SPOT_FINDER_DATABASE_PASSWORD"] %>

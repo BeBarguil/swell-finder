@@ -1,0 +1,80 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header com localização -->
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">
+      🏄‍♂️ Encontre as Melhores Ondas
+    </h1>
+    <p class="text-gray-600 mb-4">
+      Descubra praias próximas com condições perfeitas para surf
+    </p>
+    
+    <button 
+      id="get-location-btn" 
+      data-controller="geolocation"
+      data-action="click->geolocation#getLocation"
+      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 flex items-center space-x-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+      </svg>
+      <span>Usar Minha Localização</span>
+    </button>
+    
+    <div id="location-status" class="mt-2 text-sm text-gray-600"></div>
+  </div>
+
+  <!-- Grid de praias -->
+  <div id="beaches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% if @beaches.empty? %>
+      <div class="col-span-full text-center py-12">
+        <p class="text-gray-500 text-lg">
+          Use sua localização para encontrar praias próximas!
+        </p>
+      </div>
+    <% else %>
+      <% @beaches.each do |beach| %>
+        <%= render partial: 'beach_card', locals: { beach: beach, user_location: @user_location } %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  // Controlador Stimulus para geolocalização
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('get-location-btn');
+    const status = document.getElementById('location-status');
+    const grid = document.getElementById('beaches-grid');
+    
+    if (btn) {
+      btn.addEventListener('click', () => {
+        if (!navigator.geolocation) {
+          status.textContent = 'Geolocalização não suportada pelo navegador';
+          status.className = 'mt-2 text-sm text-red-600';
+          return;
+        }
+        
+        status.textContent = 'Buscando sua localização...';
+        status.className = 'mt-2 text-sm text-blue-600';
+        btn.disabled = true;
+        
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            status.textContent = `Localização encontrada! Buscando praias próximas...`;
+            
+            // Redirecionar com parâmetros de localização
+            window.location.href = `/?lat=${lat}&lng=${lng}`;
+          },
+          (error) => {
+            status.textContent = 'Erro ao obter localização. Verifique as permissões.';
+            status.className = 'mt-2 text-sm text-red-600';
+            btn.disabled = false;
+          }
+        );
+      });
+    }
+  });
+</script>

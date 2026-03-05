@@ -1,0 +1,179 @@
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Breadcrumb -->
+  <div class="mb-6">
+    <a href="/" class="text-blue-600 hover:text-blue-800 flex items-center space-x-1">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      <span>Voltar para praias</span>
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">
+      <%= @beach.name %>
+    </h1>
+    
+    <div class="flex items-center space-x-4 text-gray-600 mb-4">
+      <span class="flex items-center space-x-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        <span><%= "#{@beach.city}, #{@beach.state}" if @beach.city && @beach.state %></span>
+      </span>
+      
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= 
+        case @beach.difficulty_level
+        when 'beginner' then 'bg-green-100 text-green-800'
+        when 'intermediate' then 'bg-yellow-100 text-yellow-800'
+        when 'advanced' then 'bg-red-100 text-red-800'
+        end
+      %>">
+        <%= @beach.difficulty_label %>
+      </span>
+    </div>
+    
+    <% if @beach.description %>
+      <p class="text-gray-700 mb-4"><%= @beach.description %></p>
+    <% end %>
+    
+    <!-- Características da praia -->
+    <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200">
+      <% if @beach.beach_type %>
+        <div>
+          <p class="text-sm text-gray-500">Tipo de Praia</p>
+          <p class="font-semibold text-gray-900"><%= @beach.beach_type %></p>
+        </div>
+      <% end %>
+      
+      <% if @beach.ideal_swell_direction %>
+        <div>
+          <p class="text-sm text-gray-500">Direção Ideal do Swell</p>
+          <p class="font-semibold text-gray-900"><%= @beach.ideal_swell_direction %></p>
+        </div>
+      <% end %>
+      
+      <% if @beach.ideal_wind_direction %>
+        <div>
+          <p class="text-sm text-gray-500">Vento Ideal</p>
+          <p class="font-semibold text-gray-900"><%= @beach.ideal_wind_direction %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Condições Atuais -->
+  <% if @current_conditions %>
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Condições Atuais</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Ondas -->
+        <div class="bg-blue-50 rounded-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Ondas</h3>
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
+            </div>
+          </div>
+          <p class="text-3xl font-bold text-blue-600 mb-2">
+            <%= @current_conditions.wave_height_formatted %>
+          </p>
+          <div class="space-y-1 text-sm text-gray-600">
+            <% if @current_conditions.wave_period %>
+              <p>Período: <%= @current_conditions.wave_period %>s</p>
+            <% end %>
+            <p>Direção: <%= @current_conditions.wave_direction_text %></p>
+            <p class="font-semibold text-gray-900 mt-2">
+              <%= @current_conditions.swell_quality %>
+            </p>
+          </div>
+        </div>
+        
+        <!-- Vento -->
+        <div class="bg-cyan-50 rounded-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Vento</h3>
+            <div class="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+          </div>
+          <p class="text-3xl font-bold text-cyan-600 mb-2">
+            <%= @current_conditions.wind_speed_formatted %>
+          </p>
+          <div class="space-y-1 text-sm text-gray-600">
+            <p>Direção: <%= @current_conditions.wind_direction_text %></p>
+            <p class="font-semibold text-gray-900 mt-2">
+              <%= @current_conditions.wind_type %>
+            </p>
+          </div>
+        </div>
+        
+        <!-- Status Geral -->
+        <div class="<%= @current_conditions.good_conditions? ? 'bg-green-50' : 'bg-yellow-50' %> rounded-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Status</h3>
+            <div class="w-12 h-12 <%= @current_conditions.good_conditions? ? 'bg-green-100' : 'bg-yellow-100' %> rounded-full flex items-center justify-center">
+              <% if @current_conditions.good_conditions? %>
+                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+              <% else %>
+                <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              <% end %>
+            </div>
+          </div>
+          <p class="text-lg font-bold <%= @current_conditions.good_conditions? ? 'text-green-600' : 'text-yellow-600' %> mb-2">
+            <%= @current_conditions.good_conditions? ? 'Boas Condições' : 'Condições Fracas' %>
+          </p>
+          <p class="text-sm text-gray-600">
+            <%= @current_conditions.good_conditions? ? 'Ótimo momento para pegar umas ondas!' : 'Condições não estão ideais para surf.' %>
+          </p>
+        </div>
+      </div>
+      
+      <div class="mt-6 text-sm text-gray-500 text-right">
+        Atualizado em <%= @current_conditions.created_at.strftime('%d/%m/%Y às %H:%M') %>
+      </div>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-6 text-center">
+      <p class="text-gray-500">Dados de condições não disponíveis no momento.</p>
+    </div>
+  <% end %>
+
+  <!-- Histórico recente -->
+  <% if @recent_conditions.any? %>
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Histórico Recente</h2>
+      
+      <div class="space-y-4">
+        <% @recent_conditions.each do |condition| %>
+          <div class="border-l-4 <%= condition.good_conditions? ? 'border-green-500' : 'border-gray-300' %> pl-4 py-2">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-semibold text-gray-900">
+                  <%= condition.wave_height_formatted %> - <%= condition.swell_quality %>
+                </p>
+                <p class="text-sm text-gray-600">
+                  Vento: <%= condition.wind_speed_formatted %> <%= condition.wind_direction_text %>
+                </p>
+              </div>
+              <p class="text-sm text-gray-500">
+                <%= condition.created_at.strftime('%d/%m %H:%M') %>
+              </p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
