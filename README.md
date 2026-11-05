@@ -235,11 +235,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 👨‍💻 Autor
 
-**Seu Nome**
-
-- GitHub: [@seu-usuario](https://github.com/seu-usuario)
-- LinkedIn: [seu-nome](https://linkedin.com/in/seu-nome)
-- Email: seu.email@exemplo.com
+**Beatriz Barguil**
 
 ## 🙏 Agradecimentos
 
